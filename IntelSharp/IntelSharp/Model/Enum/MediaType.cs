@@ -30,6 +30,12 @@
         Video,
         Container, //Archive
         Html,
-        Text
+        Text,
+        Ebook,
+
+        Database = 27,
+        Email,
+        IndexFile,
+        Domain
     }
 }
