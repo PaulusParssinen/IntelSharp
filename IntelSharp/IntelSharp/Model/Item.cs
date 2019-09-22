@@ -8,7 +8,8 @@ namespace IntelSharp.Model
     /// </summary>
     public class Item
     {
-        public string SystemId { get; set; }
+        public Guid SystemId { get; set; }
+        public Guid Owner { get; set; }
         public string StorageId { get; set; }
         public bool InStore { get; set; }
         public long Size { get; set; }
@@ -19,8 +20,12 @@ namespace IntelSharp.Model
         public string Name { get; set; }
         public string Description { get; set; }
         public int XScore { get; set; }
-        public long Simhash { get; set; }
+        public ulong Simhash { get; set; }
         public string Bucket { get; set; }
+        public KeyValue[] KeyValues { get; set; }
+        public string IndexFile { get; set; }
+        public string HistoryFile { get; set; }
+        public bool PerfectMatch { get; set; }
 
         public IEnumerable<Tag> Tags { get; set; }
         public IEnumerable<Relationship> Relationships { get; set; }
