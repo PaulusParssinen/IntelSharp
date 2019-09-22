@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
+using IntelSharp.Model;
+
 namespace IntelSharp.Sandbox
 {
     public class Program
@@ -10,18 +12,28 @@ namespace IntelSharp.Sandbox
 
         public Program(Queue<string> args)
         {
-            _context = new IXApiContext(args.Dequeue(), args.Dequeue());
+            _context = new IXApiContext(baseUrl: args.Dequeue(), key: args.Dequeue());
         }
 
         public async Task RunAsync(Queue<string> args)
         {
+            string searchTerm = args.Dequeue();
+
             var searchApi = new SearchApi(_context);
+            var authInfo = await searchApi.GetAuthenticationInfoAsync();
 
-            Guid resultId = await searchApi.SearchAsync(args.Dequeue());
-            
-            //Fetch results using the obtained search result identifier 
+            Guid resultId = await searchApi.SearchAsync(searchTerm);
+
+            //Fetch results using the obtained search result job identifier
+            Console.WriteLine($"[{resultId}] Records for the term: " + searchTerm);
+            foreach (Item item in await searchApi.FetchResultsAsync(resultId))
+            {
+                Console.WriteLine($" [{item.SystemId}] Type: {item.Type}, Bucket: {item.Bucket}, Size: {item.Size} bytes");
+            }
+
+            var stats = await searchApi.GetStatisticsAsync(resultId);
         }
-
+        
         static void Main(string[] args)
         {
             Console.WriteLine("IntelSharp - Sandbox");

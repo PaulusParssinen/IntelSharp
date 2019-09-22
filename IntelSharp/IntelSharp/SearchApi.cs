@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 using IntelSharp.Model;
 
@@ -38,12 +39,44 @@ namespace IntelSharp
             var response = await IXAPI.PostAsync<SearchResponse>(_context,
                 "/intelligent/search", searchRequest).ConfigureAwait(false);
 
-            //TODO: Statuses
+            //TODO: Status
 
             return response.Id;
         }
+        public async Task<IEnumerable<Item>> FetchResultsAsync(Guid searchId, int offset = 0, int limit = 100)
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                { "id", searchId },
+                { "offset", offset },
+                { "limit", limit }
+            };
 
-        public async Task FetchResultsAsync() { throw new NotImplementedException(); }
-        public async Task TerminateAsync() { throw new NotImplementedException(); }
+            var response = await IXAPI.GetAsync<SearchResultResponse>(_context,
+                "/intelligent/search/result", parameters).ConfigureAwait(false);
+
+            //TODO: SearchResultStatus to caller & validation
+
+            return response.Records;
+        }
+        public async Task<SearchStatistic> GetStatisticsAsync(Guid searchId)
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                { "id", searchId }
+            };
+
+            return await IXAPI.GetAsync<SearchStatistic>(_context,
+                "/intelligent/search/statistic", parameters).ConfigureAwait(false);
+        }
+
+        public async Task<AuthenticationInfo> GetAuthenticationInfoAsync()
+        {
+            return await IXAPI.GetAsync<AuthenticationInfo>(_context,
+                "/authenticate/info").ConfigureAwait(false);
+        }
+
+        public async Task TerminateAsync(Guid searchId) { throw new NotImplementedException(); }
+        public async Task ExportAsync(Guid searchId) { throw new NotImplementedException(); }
     }
 }

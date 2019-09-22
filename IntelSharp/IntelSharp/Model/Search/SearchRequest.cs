@@ -4,7 +4,6 @@ namespace IntelSharp.Model
 {
     public class SearchRequest
     {
-        //lookuplevel
         public string Term { get; set; }
         public string[] Buckets { get; set; }
         public int Timeout { get; set; }
