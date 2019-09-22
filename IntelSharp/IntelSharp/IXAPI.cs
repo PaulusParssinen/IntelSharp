@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Net;
+using System.Web;
 using System.Text;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 using IntelSharp.Json;
 
@@ -21,6 +23,7 @@ namespace IntelSharp
 
             _serializerOptions = new JsonSerializerOptions();
             _serializerOptions.Converters.Add(new DateTimeConverter());
+            _serializerOptions.PropertyNameCaseInsensitive = true;
         }
 
         public static HttpRequestMessage CreateRequest(IXApiContext context, HttpMethod method, string path,
@@ -36,7 +39,6 @@ namespace IntelSharp
                 string jsonContent = JsonSerializer.Serialize(parameters, _serializerOptions);
                 request.Content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
             }
-
             return request;
         }
 
@@ -46,7 +48,7 @@ namespace IntelSharp
         }
 
         public static async Task<T> GetAsync<T>(string requestUrl,
-            Func<HttpContent, Task<T>> contentDeserializer = null)
+            Func<HttpContent, Task<T>> contentDeserializer = default)
         {
             using var request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
             using var response = await _client.SendAsync(request).ConfigureAwait(false);
@@ -54,8 +56,19 @@ namespace IntelSharp
             return await DeserializeContentAsync(response, contentDeserializer).ConfigureAwait(false);
         }
         public static async Task<T> GetAsync<T>(IXApiContext context, string path,
-            Func<HttpContent, Task<T>> contentDeserializer = null)
+            Dictionary<string, object> queryParameters = default,
+            Func<HttpContent, Task<T>> contentDeserializer = default)
         {
+            if (queryParameters?.Count > 0)
+            {
+                var query = HttpUtility.ParseQueryString(string.Empty); //We need QueryBuilder. Disgusting.
+                foreach (var (key, value) in queryParameters)
+                {
+                    query.Add(key, value.ToString());
+                }
+                path += "?" + query.ToString();
+            }
+
             using var request = CreateRequest(context, HttpMethod.Get, path, null);
             using var response = await _client.SendAsync(request).ConfigureAwait(false);
 
@@ -64,7 +77,7 @@ namespace IntelSharp
 
         public static async Task<T> PostAsync<T>(IXApiContext context, string path,
             object parameters = default,
-            Func<HttpContent, Task<T>> contentDeserializer = null)
+            Func<HttpContent, Task<T>> contentDeserializer = default)
         {
             using var request = CreateRequest(context, HttpMethod.Post, path, parameters);
             using var response = await _client.SendAsync(request).ConfigureAwait(false);
@@ -73,7 +86,7 @@ namespace IntelSharp
         }
 
         public static async Task<T> DeserializeContentAsync<T>(this HttpResponseMessage response,
-            Func<HttpContent, Task<T>> responseContentConverter = null)
+            Func<HttpContent, Task<T>> responseContentConverter = default)
         {
             if (!response.IsSuccessStatusCode)
             {
@@ -98,7 +111,7 @@ namespace IntelSharp
                 return (T)(object)await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
 
             if (response.Content.Headers.ContentType.MediaType == "application/json")
-                return await JsonSerializer.DeserializeAsync<T>(await response.Content.ReadAsStreamAsync().ConfigureAwait(false));
+                return await JsonSerializer.DeserializeAsync<T>(await response.Content.ReadAsStreamAsync().ConfigureAwait(false), _serializerOptions);
 
             return default;
         }
