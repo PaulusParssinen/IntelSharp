@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace IntelSharp.Model
 {
@@ -27,7 +28,9 @@ namespace IntelSharp.Model
         public string HistoryFile { get; set; }
         public bool PerfectMatch { get; set; }
 
+        [JsonPropertyName("tagsh")]
         public IEnumerable<Tag> Tags { get; set; }
+
         public IEnumerable<Relationship> Relationships { get; set; }
     }
 }
