@@ -5,6 +5,6 @@ namespace IntelSharp.Model
     public class SearchResultResponse
     {
         public IEnumerable<Item> Records { get; set; }
-        public int Status { get; set; }
+        public SearchResultStatus Status { get; set; }
     }
 }

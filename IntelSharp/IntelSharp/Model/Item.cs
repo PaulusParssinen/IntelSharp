@@ -31,6 +31,7 @@ namespace IntelSharp.Model
         [JsonPropertyName("tagsh")]
         public IEnumerable<Tag> Tags { get; set; }
 
-        public IEnumerable<Relationship> Relationships { get; set; }
+        public IEnumerable<Friend> Friends { get; set; }
+        public IEnumerable<Relationship> Relations { get; set; }
     }
 }

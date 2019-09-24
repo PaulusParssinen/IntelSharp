@@ -25,8 +25,10 @@ namespace IntelSharp.Sandbox
             Guid resultId = await searchApi.SearchAsync(searchTerm);
 
             //Fetch results using the obtained search result job identifier
+            var (resultStatus, items) = await searchApi.FetchResultsAsync(resultId);
+
             Console.WriteLine($"[{resultId}] Records for the term: " + searchTerm);
-            foreach (Item item in await searchApi.FetchResultsAsync(resultId))
+            foreach (Item item in items)
             {
                 Console.WriteLine($" [{item.SystemId}] Type: {item.Type}, Bucket: {item.Bucket}, Size: {item.Size} bytes");
             }

@@ -90,16 +90,15 @@ namespace IntelSharp
         {
             if (!response.IsSuccessStatusCode)
             {
-                if (response.StatusCode == HttpStatusCode.BadRequest)
-                    throw new InvalidOperationException("Invalid input. Encoding is invalid or a required parameter is missing");
+                return response.StatusCode switch
+                {
+                    HttpStatusCode.BadRequest => throw new InvalidOperationException("Invalid input. Encoding is invalid or a required parameter is missing."),
+                    HttpStatusCode.Unauthorized => throw new UnauthorizedAccessException("Access not authorized. This may be due missing permission for API call or to selected buckets."),
+                    HttpStatusCode.PaymentRequired => throw new UnauthorizedAccessException("No credits available."),
+                    HttpStatusCode.NotFound => throw new Exception("Item or identifier not found!"),
 
-                if (response.StatusCode == HttpStatusCode.Unauthorized)
-                    throw new UnauthorizedAccessException("Access not authorized. This may be due missing permission for API call or to selected buckets");
-
-                if (response.StatusCode == HttpStatusCode.PaymentRequired)
-                    throw new UnauthorizedAccessException("No credits available");
-
-                return default;
+                    _ => default,
+                };
             }
 
             if (responseContentConverter != null)
