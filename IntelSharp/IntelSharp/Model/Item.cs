@@ -27,6 +27,7 @@ namespace IntelSharp.Model
         public string IndexFile { get; set; }
         public string HistoryFile { get; set; }
         public bool PerfectMatch { get; set; }
+        public string Group { get; set; }
 
         [JsonPropertyName("tagsh")]
         public IEnumerable<Tag> Tags { get; set; }
