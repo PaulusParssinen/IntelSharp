@@ -7,7 +7,9 @@
         Domain,
         URL,
         PhoneNumber,
+        IpAddress = 6,
 
+        CreditCard = 17,
         URL2 = 23
     }
 }
