@@ -2,14 +2,33 @@
 {
     public enum SelectorType
     {
-        Undefined = 0,
+        UUID = 0,
         Email,
         Domain,
         URL,
-        PhoneNumber,
-        IpAddress = 6,
-
-        CreditCard = 17,
-        URL2 = 23
+        Phone,
+        Person,
+        IP,
+        CIDR,
+        User,
+        Address,
+        Tax,
+        SocialNumber,
+        IdentityNumber,
+        CompanyNumber,
+        SocialMedia,
+        Company,
+        BankNumber,
+        CreditCard,
+        File,
+        StorageId,
+        GS1GLN,
+        GS1GTIN,
+        MAC,
+        URLQuery,
+        Simhash,
+        Bitcoin,
+        Emoji,
+        IPFSContentId
     }
 }
