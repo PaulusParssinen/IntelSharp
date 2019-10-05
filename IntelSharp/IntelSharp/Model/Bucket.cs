@@ -12,8 +12,10 @@
         public const string WIKILEAKS = "leaks.public.wikileaks";
         public const string PUBLIC_LEAKS = "leaks.public.general";
         public const string DUMPSTER = "dumpster";
-        public const string WEB = "web.public";
-        public const string WEB_NORTHKOREA = "web.public.kp";
         public const string WHOIS = "whois";
+
+        public const string WEB_PUBLIC = "web.public";
+        public const string WEB_PUBLIC_NORTHKOREA = "web.public.kp";
+        public const string WEB_GOVERNMENT_RUSSIA = "web.gov.ru";
     }
 }
