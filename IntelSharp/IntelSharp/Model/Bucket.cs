@@ -15,6 +15,8 @@
         public const string WHOIS = "whois";
 
         public const string WEB_PUBLIC = "web.public";
+        public const string WEB_PUBLIC_RUSSIA = "web.public.ru";
+        public const string WEB_PUBLIC_GERMANY = "web.public.de";
         public const string WEB_PUBLIC_NORTHKOREA = "web.public.kp";
         public const string WEB_GOVERNMENT_RUSSIA = "web.gov.ru";
     }
