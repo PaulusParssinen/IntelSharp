@@ -1,5 +1,8 @@
 ﻿namespace IntelSharp.Model
 {
+    /// <summary>
+    /// Represents all the possible selector types to be either used as search term in <see cref="SearchApi"/> or exported using <see cref="ItemApi.ListSelectorsAsync(Item)"/>.
+    /// </summary>
     public enum SelectorType
     {
         UUID = 0,

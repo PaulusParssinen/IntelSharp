@@ -3,12 +3,12 @@
 namespace IntelSharp.Model
 {
     /// <summary>
-    /// Represents relationship between two <see cref="Item"/>s.
+    /// Represents a relationship between two <see cref="Item">items.</see>
     /// </summary>
     public class Relationship
     {
         /// <summary>
-        /// Target <see cref="Item.SystemId"/>
+        /// Represents the target item's <see cref="Item.SystemId"/>
         /// </summary>
         public Guid Target { get; set; }
         public int Relation { get; set; }

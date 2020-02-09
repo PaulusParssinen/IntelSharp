@@ -3,7 +3,7 @@
 namespace IntelSharp.Model
 {
     /// <summary>
-    /// Represents friend relationship between two <see cref="Item"/>s.
+    /// Represents a friend relationship between two <see cref="Item"/>s.
     /// </summary>
     public class Friend
     {
