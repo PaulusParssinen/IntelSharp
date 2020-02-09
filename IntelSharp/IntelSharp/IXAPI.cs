@@ -13,13 +13,15 @@ namespace IntelSharp
 {
     public static class IXAPI
     {
+        private const string USER_AGENT = "IntelSharp/1.0 (github.com/PaulusParssinen/IntelSharp)";
+
         private readonly static HttpClient _client;
         private readonly static JsonSerializerOptions _serializerOptions;
 
         static IXAPI()
         {
             _client = new HttpClient();
-            _client.DefaultRequestHeaders.Add("User-Agent", "IntelSharp/V1");
+            _client.DefaultRequestHeaders.Add("User-Agent", USER_AGENT);
 
             _serializerOptions = new JsonSerializerOptions();
             _serializerOptions.Converters.Add(new DateTimeConverter());
@@ -40,11 +42,6 @@ namespace IntelSharp
                 request.Content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
             }
             return request;
-        }
-
-        public static async Task<HttpResponseMessage> SendAsync(this HttpRequestMessage request)
-        {
-            return await _client.SendAsync(request).ConfigureAwait(false);
         }
 
         public static async Task<T> GetAsync<T>(string requestUrl,
@@ -95,7 +92,7 @@ namespace IntelSharp
                     HttpStatusCode.BadRequest => throw new InvalidOperationException("Invalid input. Encoding is invalid or a required parameter is missing."),
                     HttpStatusCode.Unauthorized => throw new UnauthorizedAccessException("Access not authorized. This may be due missing permission for API call or to selected buckets."),
                     HttpStatusCode.PaymentRequired => throw new UnauthorizedAccessException("No credits available."),
-                    HttpStatusCode.NotFound => throw new Exception("Item or identifier not found!"),
+                    HttpStatusCode.NotFound => throw new Exception("Item or identifier not found."),
 
                     _ => default,
                 };
@@ -106,6 +103,7 @@ namespace IntelSharp
 
             if (typeof(T) == typeof(string))
                 return (T)(object)await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
             if (typeof(T) == typeof(byte[]))
                 return (T)(object)await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
 

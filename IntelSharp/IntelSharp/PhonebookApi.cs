@@ -22,7 +22,7 @@ namespace IntelSharp
         /// <param name="timeout">The timeout in seconds.</param>
         /// <param name="maxResults">The maximum amount of selector results to be queried.</param>
         /// <param name="mediaType">The <see cref="MediaType"/> filter.</param>
-        /// <param name="terminate">An array of search identifiers to be terminated.</param>
+        /// <param name="terminate">An array of search identifiers to be terminated. Can also be done with <seealso cref="TerminateAsync(Guid)"/></param>
         /// <exception cref="ArgumentException">Thrown when invalid phonebook search <paramref name="term"/> is submitted.</exception>
         /// <returns>The phonebook search identifier to be used to retrieve the results.</returns>
         public async Task<Guid> SearchAsync(string term,
@@ -63,6 +63,21 @@ namespace IntelSharp
             //TODO: validation & stuff prob
 
             return (response.Status, response.Selectors);
+        }
+
+        /// <summary>
+        /// Terminates the search, no-op if search was already terminated.
+        /// </summary>
+        /// <param name="searchId">The identifier of search to be terminated.</param>
+        public async Task TerminateAsync(Guid searchId)
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                { "id", searchId }
+            };
+
+            await IXAPI.PostAsync<string>(_context,
+                "/intelligent/search/terminate", parameters).ConfigureAwait(false);
         }
     }
 }
