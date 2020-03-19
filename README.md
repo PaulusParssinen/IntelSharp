@@ -1,2 +1,5 @@
 # Intel#
-.NET Core 3.0 library for Intelligence X API
+.NET Core 3.1 library for Intelligence X API
+
+# Usage
+Soon
