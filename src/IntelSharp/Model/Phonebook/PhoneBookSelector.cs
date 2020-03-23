@@ -1,6 +1,6 @@
 ﻿namespace IntelSharp.Model
 {
-    public class PhonebookSelector
+    public class PhoneBookSelector
     {
         public string SelectorValue { get; set; }
         public SelectorType SelectorType { get; set; }

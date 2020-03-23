@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 
 using IntelSharp.Json;
+using IntelSharp.Model;
 
 namespace IntelSharp
 {
@@ -28,6 +29,9 @@ namespace IntelSharp
             _serializerOptions.PropertyNameCaseInsensitive = true;
         }
 
+        public async static Task<AuthenticationInfo> GetAuthenticationInfoAsync(IXApiContext context)
+            => await GetAsync<AuthenticationInfo>(context, "/authenticate/info").ConfigureAwait(false);
+        
         public static HttpRequestMessage CreateRequest(IXApiContext context, HttpMethod method, string path,
             object parameters = default)
         {
@@ -66,7 +70,7 @@ namespace IntelSharp
                 path += "?" + query.ToString();
             }
 
-            using var request = CreateRequest(context, HttpMethod.Get, path, null);
+            using var request = CreateRequest(context, HttpMethod.Get, path);
             using var response = await _client.SendAsync(request).ConfigureAwait(false);
 
             return await DeserializeContentAsync(response, contentDeserializer).ConfigureAwait(false);
@@ -108,7 +112,7 @@ namespace IntelSharp
                 return (T)(object)await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
 
             if (response.Content.Headers.ContentType.MediaType == "application/json")
-                return await JsonSerializer.DeserializeAsync<T>(await response.Content.ReadAsStreamAsync().ConfigureAwait(false), _serializerOptions);
+                return await JsonSerializer.DeserializeAsync<T>(await response.Content.ReadAsStreamAsync().ConfigureAwait(false), _serializerOptions).ConfigureAwait(false);
 
             return default;
         }

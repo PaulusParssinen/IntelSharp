@@ -63,5 +63,10 @@
         /// Web » Government » Russia
         /// </summary>
         public const string WEB_GOVERNMENT_RUSSIA = "web.gov.ru";
+
+        /// <summary>
+        /// Documents » Sci-Hub
+        /// </summary>
+        public const string SCI_HUB = "documents.public.scihub";
     }
 }

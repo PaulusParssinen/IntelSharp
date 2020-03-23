@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
-namespace IntelSharp.Model
+namespace IntelSharp.Model.Search
 {
     public class SearchResponse
     {

@@ -14,6 +14,7 @@ namespace IntelSharp
         {
             _context = context;
         }
+
         public async Task<XScoreExplanation> ExplainXScoreAsync(Item item)
         {
             return await ExplainXScoreAsync(item.SystemId, item.Bucket).ConfigureAwait(false);

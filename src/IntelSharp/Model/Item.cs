@@ -77,7 +77,7 @@ namespace IntelSharp.Model
 
         /// <summary>
         /// Similarity hash called SimHash developed by Moses Charikar. 
-        /// <para>Can be used to find similar items when used as a term in <see cref="SearchApi.SearchAsync(string, string[], int, int, DateTime, DateTime, SortType, MediaType, Guid[])"/></para>
+        /// <para>Can be used to find similar items when used as a term in <see cref="IntelligentSearchApi.SearchAsync(string, string[], int, int, DateTime, DateTime, SortType, MediaType, Guid[])"/></para>
         /// </summary>
         public ulong Simhash { get; set; }
 

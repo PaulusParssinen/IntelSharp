@@ -3,22 +3,29 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 
 using IntelSharp.Model;
+using IntelSharp.Model.Search;
 
 namespace IntelSharp
 {
-    public class SearchApi
+    /// <summary>
+    /// This API allows performing searches using various <see cref="SelectorType">selectors.</see>
+    /// </summary>
+    /// <typeparam name="TResult">The result item type.</typeparam>
+    public abstract class SearchApi<TResult, TResultResponse>
     {
-        private readonly IXApiContext _context;
+        protected readonly string _apiPathSegment;
+        protected readonly IXApiContext _context;
 
-        public SearchApi(IXApiContext context)
+        protected SearchApi(string apiPathSegment, IXApiContext context)
         {
+            _apiPathSegment = apiPathSegment;
             _context = context;
         }
 
         /// <summary>
         /// The initial search request to obtain the search identifier.
         /// </summary>
-        /// <param name="term">The search term.</param>
+        /// <param name="term">The search term. Must be valid <see cref="SelectorType"/>.</param>
         /// <param name="buckets">The buckets to be queried for results.</param>
         /// <param name="timeout">The timeout in seconds.</param>
         /// <param name="maxResults">The maximum results to be queried per bucket, therefore the aggregated result set might be even bigger.</param>
@@ -40,58 +47,48 @@ namespace IntelSharp
             var searchRequest = new SearchRequest
             {
                 Term = term,
-                Buckets = buckets ?? new string[0],
+                Buckets = buckets ?? Array.Empty<string>(),
                 Timeout = timeout,
                 MaxResults = maxResults,
                 DateFrom = from,
                 DateTo = to,
                 Sort = sorting,
                 Media = mediaType,
-                Terminate = terminate ?? new Guid[0]
+                Terminate = terminate ?? Array.Empty<Guid>()
             };
-
+            
             var response = await IXAPI.PostAsync<SearchResponse>(_context,
-                "/intelligent/search", searchRequest).ConfigureAwait(false);
+                _apiPathSegment + "/search", searchRequest).ConfigureAwait(false);
 
             if (response.Status == SearchStatus.InvalidTerm)
                 throw new ArgumentException("Invalid input term.", nameof(term));
 
             return response.Id;
         }
-        public async Task<(SearchResultStatus, IEnumerable<Item>)> FetchResultsAsync(Guid searchId, int offset = 0, int limit = 100)
-        {
-            var parameters = new Dictionary<string, object>
-            {
-                { "id", searchId },
-                { "offset", offset },
-                { "limit", limit }
-            };
 
-            var response = await IXAPI.GetAsync<SearchResultResponse>(_context,
-                "/intelligent/search/result", parameters).ConfigureAwait(false);
+        /// <summary>
+        /// Returns the actual search results.
+        /// </summary>
+        /// <param name="searchId">The identifier of search job.</param>
+        /// <param name="offset">The search offset to start from.</param>
+        /// <param name="limit">Maximum amount of results.</param>
+        public abstract Task<(SearchResultStatus, IEnumerable<TResult>)> FetchResultsAsync(Guid searchId, int offset = 0, int limit = 100);
 
-            //TODO: validation & stuff prob
-
-            return (response.Status, response.Records);
-        }
-        public async Task<SearchStatistic> GetStatisticsAsync(Guid searchId)
+        /// <summary>
+        /// Terminates the search job, no-op if the search was already terminated.
+        /// </summary>
+        /// <param name="searchId">The identifier of search to be terminated.</param>
+        public async Task TerminateAsync(Guid searchId)
         {
             var parameters = new Dictionary<string, object>
             {
                 { "id", searchId }
             };
 
-            return await IXAPI.GetAsync<SearchStatistic>(_context,
-                "/intelligent/search/statistic", parameters).ConfigureAwait(false);
+            await IXAPI.PostAsync<string>(_context,
+                "/intelligent/search/terminate", parameters).ConfigureAwait(false);
         }
 
-        public async Task<AuthenticationInfo> GetAuthenticationInfoAsync()
-        {
-            return await IXAPI.GetAsync<AuthenticationInfo>(_context,
-                "/authenticate/info").ConfigureAwait(false);
-        }
-
-        public async Task TerminateAsync(Guid searchId) { throw new NotImplementedException(); }
-        public async Task ExportAsync(Guid searchId) { throw new NotImplementedException(); }
+        //public async Task ExportAsync(Guid searchId, int format) => throw new NotImplementedException(); //TODO:
     }
 }
