@@ -24,7 +24,7 @@ Guid searchIdentifier = await searchApi.SearchAsync(term, ...);
 var (searchStatus, items) = await searchApi.FetchResultsAsync(searchIdentifier);
 
 //Work with the result items,
-foreach (Item in items)
+foreach (Item item in items)
 { ... }
 
 //For example, you can use FileApi to download and view the contents of the found items.
