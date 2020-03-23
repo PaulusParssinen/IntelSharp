@@ -7,9 +7,16 @@
 
 ### Setup
 1. Install the [IntelSharp NuGet Package](https://www.nuget.org/packages/IntelSharp/)
-   ```
-   Install-Package IntelSharp
-   ```
+
+.NET CLI: 
+```
+dotnet add package IntelSharp --version 1.0.0
+```
+Package Manager: 
+```
+Install-Package IntelSharp -Version 1.0.0
+```
+
 2. Grab your personal Intelligence X API key from "Account > Developers" -tab.
 
 ### Snippet
