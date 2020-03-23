@@ -2,6 +2,9 @@
 .NET Core 3.1 library for [Intelligence X](https://intelx.io/) API
 
 ## Usage
+### Requirements
++ .NET Core 3.1 SDK
+
 ### Setup
 1. Install the [IntelSharp NuGet Package](https://www.nuget.org/packages/IntelSharp/)
    ```
