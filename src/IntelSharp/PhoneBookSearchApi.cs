@@ -8,7 +8,7 @@ using IntelSharp.Model.Search;
 namespace IntelSharp
 {
     /// <inheritdoc cref="SearchApi{TResult, TResultResponse}"/>
-    public class PhoneBookSearchApi : SearchApi<PhoneBookSelector, PhoneBookSearchResults>
+    public class PhoneBookSearchApi : SearchApi<PhoneBookSelector>
     {
         public PhoneBookSearchApi(IXApiContext context)
             : base("/phonebook", context)

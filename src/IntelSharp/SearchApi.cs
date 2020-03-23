@@ -11,7 +11,7 @@ namespace IntelSharp
     /// Allows performing search queries using terms, which follow <see cref="SelectorType">selectors.</see>
     /// </summary>
     /// <typeparam name="TResult">The result item type.</typeparam>
-    public abstract class SearchApi<TResult, TResultResponse>
+    public abstract class SearchApi<TResult>
     {
         protected readonly string _apiPathSegment;
         protected readonly IXApiContext _context;

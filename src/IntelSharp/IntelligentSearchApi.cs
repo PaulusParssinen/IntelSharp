@@ -8,7 +8,7 @@ using IntelSharp.Model.Search;
 namespace IntelSharp
 {
     /// <inheritdoc cref="SearchApi{TResult, TResultResponse}"/>
-    public class IntelligentSearchApi : SearchApi<Item, IntelligentSearchResults>
+    public class IntelligentSearchApi : SearchApi<Item>
     {
         public IntelligentSearchApi(IXApiContext context)
             : base("/intelligent", context)
