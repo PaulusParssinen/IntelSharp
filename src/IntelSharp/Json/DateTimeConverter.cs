@@ -7,15 +7,12 @@ namespace IntelSharp.Json
     public class DateTimeConverter : JsonConverter<DateTime>
     {
         public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            return reader.GetDateTime();
-        }
+            => reader.GetDateTime();
 
         public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
         {
-            if (value == default)
-                writer.WriteStringValue(string.Empty);
-            else writer.WriteStringValue(value.ToString("yyyy-MM-dd HH:mm"));
+            writer.WriteStringValue(value == default ? 
+                string.Empty : value.ToString("yyyy-MM-dd HH:mm"));
         }
     }
 }

@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Authors>Paulus Pärssinen</Authors>
+    <Description>.NET Core library for Intelligence X API.</Description>
+    <RepositoryUrl>https://github.com/PaulusParssinen/IntelSharp</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/PaulusParssinen/IntelSharp</PackageProjectUrl>
+    <PackageTags>intelx intelligencex intelsharp</PackageTags>
+    <Company />
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
 </Project>
