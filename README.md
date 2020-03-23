@@ -15,15 +15,17 @@ using IntelSharp;
 using IntelSharp.Model;
 ..
 
+//Initialization
 var apiContext = new IXApiContext("your-api-key");
 var searchApi = new IntelligentSearchApi(apiContext);
 
-Guid searchIdentifier = await searchApi.SearchAsync(term, ...);
+//Create a new active search job
+Guid searchIdentifier = await searchApi.SearchAsync(term: "nsa.gov", ...);
 
-//Obtain the result status and items.
+//Obtain search status and its items.
 var (searchStatus, items) = await searchApi.FetchResultsAsync(searchIdentifier);
 
-//Work with the result items,
+//Work with the result items
 foreach (Item item in items)
 { ... }
 
@@ -37,7 +39,7 @@ await searchApi.TerminateAsync(searchIdentifier);
 ```
 
 ## IntelSharp.Sandbox
-IntelSharp.Sandbox is small CLI application demonstrating basic Intel# features.
+IntelSharp.Sandbox is small CLI application demonstrating basic features of Intel# library.
 ### Prerequisites
 + [.NET Core Runtime](https://dotnet.microsoft.com/download/dotnet-core/current/runtime ".NET Core Runtime")
 
