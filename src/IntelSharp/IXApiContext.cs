@@ -11,23 +11,10 @@ namespace IntelSharp
         /// </summary>
         public string Key { get; set; } = "9df61df0-84f7-4dc7-b34c-8ccfb8646ace";
 
-        public IXApiContext(string baseUrl, string key)
-            : this(new Uri(baseUrl), key)
-        { }
-        public IXApiContext(string baseUrl)
-            : this(new Uri(baseUrl))
-        { }
-
-        public IXApiContext(Uri baseUri, string key)
-            : this(baseUri)
+        public IXApiContext(string key)
         {
             Key = key;
         }
-        public IXApiContext(Uri baseUri)
-        {
-            BaseUri = baseUri;
-        }
-
         public IXApiContext()
         { }
     }

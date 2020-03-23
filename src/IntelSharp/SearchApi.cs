@@ -8,7 +8,7 @@ using IntelSharp.Model.Search;
 namespace IntelSharp
 {
     /// <summary>
-    /// This API allows performing searches using various <see cref="SelectorType">selectors.</see>
+    /// Allows performing search queries using terms, which follow <see cref="SelectorType">selectors.</see>
     /// </summary>
     /// <typeparam name="TResult">The result item type.</typeparam>
     public abstract class SearchApi<TResult, TResultResponse>

@@ -23,8 +23,8 @@ namespace IntelSharp.Sandbox
                     Description = "A search term."
                 }
             };
-            searchCommand.Handler = CommandHandler.Create<InvocationContext, string, int, string>(HandleIntelligentSearch);
-            
+            searchCommand.Handler = CommandHandler.Create<string, int, string>(HandleIntelligentSearch);
+
             var rootCommand = new RootCommand
             {
                 searchCommand,
@@ -33,7 +33,7 @@ namespace IntelSharp.Sandbox
                     description: "Your Intelligence X API key."),
                 new Option<int>("--timeout",
                     getDefaultValue: () => 0,
-                    description: "The search timeout")
+                    description: "The search timeout in seconds.")
             };
 
             rootCommand.Description = "An example CLI application using the Intel# .NET Core library";
@@ -41,17 +41,14 @@ namespace IntelSharp.Sandbox
             return await rootCommand.InvokeAsync(args);
         }
 
-        private static async Task<int> HandleIntelligentSearch(InvocationContext context, string term, int timeout, string key)
+        private static async Task<int> HandleIntelligentSearch(string term, int timeout, string key)
         {
-            var apiContext = new IXApiContext
-            {
-                Key = key
-            };
+            var apiContext = new IXApiContext(key);
 
             var searchApi = new IntelligentSearchApi(apiContext);
 
             //Get the search result identifier in order to fetch the results.
-            Guid resultId = await searchApi.SearchAsync(term);
+            Guid resultId = await searchApi.SearchAsync(term, timeout: timeout);
 
             //Fetch the results using the obtained search result identifier
             (SearchResultStatus resultStatus, IEnumerable<Item> items) = await searchApi.FetchResultsAsync(resultId);
