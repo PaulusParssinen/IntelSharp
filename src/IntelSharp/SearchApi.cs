@@ -67,7 +67,7 @@ namespace IntelSharp
         }
 
         /// <summary>
-        /// Returns the actual search results.
+        /// Returns the actual search results for the specified search identifier.
         /// </summary>
         /// <param name="searchId">The identifier of search job.</param>
         /// <param name="offset">The search offset to start from.</param>

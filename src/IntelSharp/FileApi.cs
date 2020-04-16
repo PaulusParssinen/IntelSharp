@@ -10,6 +10,7 @@ namespace IntelSharp
     /// <summary>
     /// This API contains the methods to retrieve contents of an <see cref="Item"/>.
     /// </summary>
+    #nullable enable
     public class FileApi
     {
         private readonly IXApiContext _context;
@@ -28,14 +29,14 @@ namespace IntelSharp
         /// </summary>
         /// <param name="item">The item.</param>
         /// <returns>The raw binary data of the item.</returns>
-        public async Task<byte[]> ReadAsync(Item item)
+        public Task<byte[]> ReadAsync(Item item)
         {
-            return await ReadAsync(item.StorageId, item.Bucket).ConfigureAwait(false);
+            return ReadAsync(item.StorageId, item.Bucket);
         }
         /// <inheritdoc cref="ReadAsync(Item)"/>
         /// <param name="storageId">The <see cref="Item.StorageId">storage identifier</see> of the item.</param>
         /// <param name="bucket">The bucket in which the item is located.</param>
-        public async Task<byte[]> ReadAsync(string storageId, string bucket = default)
+        public async Task<byte[]> ReadAsync(string storageId, string? bucket = default)
         {
             const int OUTPUT_TYPE_RAW_BINARY = 0;
 
@@ -43,7 +44,7 @@ namespace IntelSharp
             {
                 { "type", OUTPUT_TYPE_RAW_BINARY },
                 { "storageid", storageId },
-                { "bucket", bucket }
+                { "bucket", bucket ?? string.Empty }
             };
 
             return await IXAPI.GetAsync<byte[]>(_context, "/file/read", parameters).ConfigureAwait(false);
@@ -61,9 +62,9 @@ namespace IntelSharp
         /// <param name="escapeHtml">Should the output HTML be escaped.</param>
         /// <exception cref="InvalidOperationException"/>
         /// <exception cref="Exception">The item was not found.</exception>
-        public async Task<byte[]> ViewAsync(Item item, ViewFormat format = ViewFormat.Text, bool escapeHtml = true)
+        public Task<byte[]> ViewAsync(Item item, ViewFormat format = ViewFormat.Text, bool escapeHtml = true)
         {
-            return await ViewAsync(item.StorageId, item.Bucket, format, escapeHtml).ConfigureAwait(false);
+            return ViewAsync(item.StorageId, item.Bucket, format, escapeHtml);
         }
         /// <inheritdoc cref="ViewAsync(Item, ViewFormat, bool)"/>
         /// <param name="storageId">The <see cref="Item.StorageId">storage identifier</see> of the item.</param>
@@ -93,9 +94,9 @@ namespace IntelSharp
         /// <param name="escapeHtml">Should the output HTML be escaped.</param>
         /// <exception cref="InvalidOperationException"/>
         /// <returns>The preview of data.</returns>
-        public async Task<byte[]> PreviewAsync(Item item, int lineCount = 12, bool escapeHtml = true)
+        public Task<byte[]> PreviewAsync(Item item, int lineCount = 12, bool escapeHtml = true)
         {
-            return await PreviewAsync(item.StorageId, item.Type, item.MediaType, item.Bucket, lineCount, escapeHtml).ConfigureAwait(false);
+            return PreviewAsync(item.StorageId, item.Type, item.MediaType, item.Bucket, lineCount, escapeHtml);
         }
         /// <inheritdoc cref="PreviewAsync(Item, int, bool)"/>
         /// <param name="storageId">The <see cref="Item.StorageId">storage identifier</see> of the item.</param>

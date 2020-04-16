@@ -29,11 +29,10 @@ namespace IntelSharp
             _serializerOptions.PropertyNameCaseInsensitive = true;
         }
 
-        public async static Task<AuthenticationInfo> GetAuthenticationInfoAsync(IXApiContext context)
-            => await GetAsync<AuthenticationInfo>(context, "/authenticate/info").ConfigureAwait(false);
+        public static Task<AuthenticationInfo> GetAuthenticationInfoAsync(IXApiContext context) => GetAsync<AuthenticationInfo>(context, "/authenticate/info");
         
         public static HttpRequestMessage CreateRequest(IXApiContext context, HttpMethod method, string path,
-            object parameters = default)
+            object? parameters = default)
         {
             var request = new HttpRequestMessage(method, context.BaseUri.GetLeftPart(UriPartial.Authority) + path);
 
@@ -49,7 +48,7 @@ namespace IntelSharp
         }
 
         public static async Task<T> GetAsync<T>(string requestUrl,
-            Func<HttpContent, Task<T>> contentDeserializer = default)
+            Func<HttpContent, Task<T>>? contentDeserializer = default)
         {
             using var request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
             using var response = await _client.SendAsync(request).ConfigureAwait(false);
@@ -57,12 +56,12 @@ namespace IntelSharp
             return await DeserializeContentAsync(response, contentDeserializer).ConfigureAwait(false);
         }
         public static async Task<T> GetAsync<T>(IXApiContext context, string path,
-            Dictionary<string, object> queryParameters = default,
-            Func<HttpContent, Task<T>> contentDeserializer = default)
+            Dictionary<string, object>? queryParameters = default,
+            Func<HttpContent, Task<T>>? contentDeserializer = default)
         {
             if (queryParameters?.Count > 0)
             {
-                var query = HttpUtility.ParseQueryString(string.Empty); //We need QueryBuilder. Disgusting.
+                var query = HttpUtility.ParseQueryString(string.Empty); //We need QueryBuilder
                 foreach (var (key, value) in queryParameters)
                 {
                     query.Add(key, value.ToString());
@@ -77,8 +76,8 @@ namespace IntelSharp
         }
 
         public static async Task<T> PostAsync<T>(IXApiContext context, string path,
-            object parameters = default,
-            Func<HttpContent, Task<T>> contentDeserializer = default)
+            object? parameters = default,
+            Func<HttpContent, Task<T>>? contentDeserializer = default)
         {
             using var request = CreateRequest(context, HttpMethod.Post, path, parameters);
             using var response = await _client.SendAsync(request).ConfigureAwait(false);
@@ -87,7 +86,7 @@ namespace IntelSharp
         }
 
         public static async Task<T> DeserializeContentAsync<T>(this HttpResponseMessage response,
-            Func<HttpContent, Task<T>> responseContentConverter = default)
+            Func<HttpContent, Task<T>>? responseContentConverter = default)
         {
             if (!response.IsSuccessStatusCode)
             {

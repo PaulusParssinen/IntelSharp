@@ -81,7 +81,11 @@ namespace IntelSharp.Model
         /// </summary>
         public ulong Simhash { get; set; }
 
+        /// <summary>
+        /// The bucket in which the item resides.
+        /// </summary>
         public string Bucket { get; set; }
+        
         public KeyValue[] KeyValues { get; set; }
         public string IndexFile { get; set; }
         public string HistoryFile { get; set; }

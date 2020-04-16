@@ -15,9 +15,9 @@ namespace IntelSharp
             _context = context;
         }
 
-        public async Task<XScoreExplanation> ExplainXScoreAsync(Item item)
+        public Task<XScoreExplanation> ExplainXScoreAsync(Item item)
         {
-            return await ExplainXScoreAsync(item.SystemId, item.Bucket).ConfigureAwait(false);
+            return ExplainXScoreAsync(item.SystemId, item.Bucket);
         }
         public async Task<XScoreExplanation> ExplainXScoreAsync(Guid systemId, string bucket)
         {
@@ -31,9 +31,9 @@ namespace IntelSharp
                 "/item/explain/xscore", parameters).ConfigureAwait(false);
         }
 
-        public async Task<IEnumerable<Selector>> ListSelectorsAsync(Item item)
+        public Task<IEnumerable<Selector>> ListSelectorsAsync(Item item)
         {
-            return await ListSelectorsAsync(item.SystemId, item.Bucket).ConfigureAwait(false);
+            return ListSelectorsAsync(item.SystemId, item.Bucket);
         }
         public async Task<IEnumerable<Selector>> ListSelectorsAsync(Guid systemId, string bucket)
         {
