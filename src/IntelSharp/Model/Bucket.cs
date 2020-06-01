@@ -56,6 +56,10 @@
         /// </summary>
         public const string WEB_PUBLIC_GERMANY = "web.public.de";
         /// <summary>
+        /// Web » Public » .com
+        /// </summary>
+        public const string WEB_PUBLIC_COM = "web.public.com";
+        /// <summary>
         /// Web » Public » North Korea
         /// </summary>
         public const string WEB_PUBLIC_NORTHKOREA = "web.public.kp";
