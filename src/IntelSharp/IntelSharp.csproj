@@ -1,22 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-  </PropertyGroup>
-    
-  <PropertyGroup>
-    <Authors>Paulus Pärssinen</Authors>
-    <Description>.NET Core library for Intelligence X API.</Description>
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+	</PropertyGroup>
 
-    <Version>1.0.1</Version>
-    <FileVersion>1.0.1</FileVersion>
-    <AssemblyVersion>1.0.0</AssemblyVersion>
+	<PropertyGroup>
+		<Authors>Paulus Pärssinen</Authors>
+		<Description>.NET library for Intelligence X API.</Description>
 
-    <RepositoryUrl>https://github.com/PaulusParssinen/IntelSharp</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/PaulusParssinen/IntelSharp</PackageProjectUrl>
-    
-    <PackageTags>intelx intelligencex intelsharp</PackageTags>
-  </PropertyGroup>
+		<Version>1.1.0</Version>
+		<FileVersion>1.1.0</FileVersion>
+		<AssemblyVersion>1.1.0</AssemblyVersion>
+
+		<RepositoryUrl>https://github.com/PaulusParssinen/IntelSharp</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/PaulusParssinen/IntelSharp</PackageProjectUrl>
+
+		<PackageTags>intelx intelligencex intelsharp</PackageTags>
+	</PropertyGroup>
 
 </Project>
