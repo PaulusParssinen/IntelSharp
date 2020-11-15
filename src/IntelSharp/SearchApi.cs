@@ -39,7 +39,7 @@ namespace IntelSharp
         public async Task<Guid> SearchAsync(string term,
             string[] buckets = default,
             int timeout = 0, int maxResults = 0,
-            DateTime from = default, DateTime to = default,
+            DateTime? from = default, DateTime? to = default,
             SortType sorting = default,
             MediaType mediaType = default,
             Guid[] terminate = default)

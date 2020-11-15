@@ -9,8 +9,8 @@ namespace IntelSharp.Model.Search
         public IEnumerable<string> Buckets { get; set; }
         public int Timeout { get; set; }
         public int MaxResults { get; set; }
-        public DateTime DateFrom { get; set; }
-        public DateTime DateTo { get; set; }
+        public DateTime? DateFrom { get; set; }
+        public DateTime? DateTo { get; set; }
         public SortType Sort { get; set; }
         public MediaType Media { get; set; }
         public IEnumerable<Guid> Terminate { get; set; }
