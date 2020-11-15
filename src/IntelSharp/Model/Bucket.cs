@@ -64,6 +64,10 @@
         /// </summary>
         public const string WEB_PUBLIC_NORTHKOREA = "web.public.kp";
         /// <summary>
+        /// Web » Public » Decentralized TLDs
+        /// </summary>
+        public const string WEB_PUBLIC_PEER = "web.public.peer";
+        /// <summary>
         /// Web » Government » Russia
         /// </summary>
         public const string WEB_GOVERNMENT_RUSSIA = "web.gov.ru";
