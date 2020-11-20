@@ -68,6 +68,10 @@
         /// </summary>
         public const string WEB_PUBLIC_PEER = "web.public.peer";
         /// <summary>
+        /// Web » Public » Government US
+        /// </summary>
+        public const string WEB_PUBLIC_GOV = "web.public.gov";
+        /// <summary>
         /// Web » Government » Russia
         /// </summary>
         public const string WEB_GOVERNMENT_RUSSIA = "web.gov.ru";
