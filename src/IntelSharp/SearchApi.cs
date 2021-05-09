@@ -80,15 +80,9 @@ namespace IntelSharp
         /// Terminates the search job, no-op if the search was already terminated.
         /// </summary>
         /// <param name="searchId">The identifier of search to be terminated.</param>
-        public async Task TerminateAsync(Guid searchId, CancellationToken cancellationToken = default)
+        public Task TerminateAsync(Guid searchId, CancellationToken cancellationToken = default)
         {
-            var parameters = new Dictionary<string, object>
-            {
-                { "id", searchId }
-            };
-
-            await IXAPI.PostAsync<string>(_context,
-                "/intelligent/search/terminate", parameters, cancellationToken: cancellationToken).ConfigureAwait(false);
+            return IXAPI.GetAsync<string>(_context, "/intelligent/search/terminate?id=" + searchId, cancellationToken: cancellationToken);
         }
 
         //public async Task ExportAsync(Guid searchId, int format, CancellationToken cancellationToken = default) => throw new NotImplementedException(); //TODO:
