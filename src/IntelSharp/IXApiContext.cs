@@ -9,7 +9,7 @@ namespace IntelSharp
         /// <summary>
         /// Your Intelligence X user API key.
         /// </summary>
-        public string Key { get; set; }
+        public string Key { get; init; }
 
         public IXApiContext(string key)
         {
