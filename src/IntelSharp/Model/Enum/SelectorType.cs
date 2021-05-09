@@ -1,7 +1,7 @@
 ﻿namespace IntelSharp.Model
 {
     /// <summary>
-    /// Represents all the possible selector types to be either used as search term in <see cref="IntelligentSearchApi"/> or exported using <see cref="ItemApi.ListSelectorsAsync(Item)"/>.
+    /// Represents all the possible selector types to be either used as search term in <see cref="IntelligentSearchApi"/> or exported using <see cref="ItemApi.ListSelectorsAsync(Item, System.Threading.CancellationToken)"/>.
     /// </summary>
     public enum SelectorType
     {

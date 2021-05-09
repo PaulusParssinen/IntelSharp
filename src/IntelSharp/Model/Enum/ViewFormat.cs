@@ -1,7 +1,7 @@
 ﻿namespace IntelSharp.Model
 {
     /// <summary>
-    /// Represents the possible output formats for <see cref="FileApi.ViewAsync(Item, ViewFormat, bool)"/>
+    /// Represents the possible output formats for <see cref="FileApi.ViewAsync(Item, ViewFormat, bool, System.Threading.CancellationToken)"/>
     /// </summary>
     public enum ViewFormat
     {

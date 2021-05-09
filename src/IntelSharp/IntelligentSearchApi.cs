@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
@@ -7,14 +8,14 @@ using IntelSharp.Model.Search;
 
 namespace IntelSharp
 {
-    /// <inheritdoc cref="SearchApi{TResult, TResultResponse}"/>
+    /// <inheritdoc cref="SearchApi{TResult}"/>
     public class IntelligentSearchApi : SearchApi<Item>
     {
         public IntelligentSearchApi(IXApiContext context)
             : base("/intelligent", context)
         { }
 
-        public override async Task<(SearchResultStatus, IEnumerable<Item>)> FetchResultsAsync(Guid searchId, int offset = 0, int limit = 100)
+        public override async Task<(SearchResultStatus, IEnumerable<Item>)> FetchResultsAsync(Guid searchId, int offset = 0, int limit = 100, CancellationToken cancellationToken = default)
         {
             var parameters = new Dictionary<string, object>
             {
@@ -23,8 +24,8 @@ namespace IntelSharp
                 { "limit", limit }
             };
 
-            var response = await IXAPI.GetAsync<IntelligentSearchResults>(_context,
-                _apiPathSegment + "/search/result", parameters).ConfigureAwait(false);
+            var response = await IXAPI.GetAsync<IntelligentSearchResults>(_context, 
+                _apiPathSegment + "/search/result", parameters, cancellationToken: cancellationToken).ConfigureAwait(false);
 
             return (response.Status, response.Records);
         }
@@ -32,15 +33,15 @@ namespace IntelSharp
         /// <summary>
         /// Fetches statistics about the search result items.
         /// </summary>
-        public async Task<SearchStatistic> GetStatisticsAsync(Guid searchId)
+        public Task<SearchStatistic> GetStatisticsAsync(Guid searchId, CancellationToken cancellationToken = default)
         {
             var parameters = new Dictionary<string, object>
             {
                 { "id", searchId }
             };
 
-            return await IXAPI.GetAsync<SearchStatistic>(_context,
-                "/intelligent/search/statistic", parameters).ConfigureAwait(false);
+            return IXAPI.GetAsync<SearchStatistic>(_context, 
+                "/intelligent/search/statistic", parameters, cancellationToken: cancellationToken);
         }
     }
 }

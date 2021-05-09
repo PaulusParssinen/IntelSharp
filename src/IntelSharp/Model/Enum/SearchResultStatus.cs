@@ -1,7 +1,7 @@
 ﻿namespace IntelSharp.Model
 {
     /// <summary>
-    /// Represents all possible a search job statuses.
+    /// Represents all possible search job statuses.
     /// </summary>
     public enum SearchResultStatus
     {

@@ -2,6 +2,7 @@
 using System.Net;
 using System.Web;
 using System.Net.Http;
+using System.Threading;
 using System.Text.Json;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -31,8 +32,8 @@ namespace IntelSharp
             _serializerOptions.Converters.Add(new DateTimeConverter());
         }
 
-        public static Task<AuthenticationInfo> GetAuthenticationInfoAsync(IXApiContext context) 
-            => GetAsync<AuthenticationInfo>(context, "/authenticate/info");
+        public static Task<AuthenticationInfo> GetAuthenticationInfoAsync(IXApiContext context, CancellationToken cancellationToken = default) 
+            => GetAsync<AuthenticationInfo>(context, "/authenticate/info", cancellationToken: cancellationToken);
         
         public static HttpRequestMessage CreateRequest(IXApiContext context, HttpMethod method, string path,
             object parameters = default)
@@ -49,15 +50,16 @@ namespace IntelSharp
         }
 
         public static async Task<T> GetAsync<T>(string requestUrl,
-            Func<HttpContent, Task<T>> contentDeserializer = default)
+            Func<HttpContent, CancellationToken, Task<T>> contentDeserializer = default,
+            CancellationToken cancellationToken = default)
         {
-            using HttpResponseMessage response = await _client.GetAsync(requestUrl).ConfigureAwait(false);
-
-            return await DeserializeContentAsync(response, contentDeserializer).ConfigureAwait(false);
+            using HttpResponseMessage response = await _client.GetAsync(requestUrl, cancellationToken).ConfigureAwait(false);
+            return await DeserializeContentAsync(response, contentDeserializer, cancellationToken).ConfigureAwait(false);
         }
         public static async Task<T> GetAsync<T>(IXApiContext context, string path,
             Dictionary<string, object> queryParameters = default,
-            Func<HttpContent, Task<T>> contentDeserializer = default)
+            Func<HttpContent, CancellationToken, Task<T>> contentDeserializer = default,
+            CancellationToken cancellationToken = default)
         {
             if (queryParameters?.Count > 0)
             {
@@ -70,23 +72,25 @@ namespace IntelSharp
             }
 
             using HttpRequestMessage request = CreateRequest(context, HttpMethod.Get, path);
-            using HttpResponseMessage response = await _client.SendAsync(request).ConfigureAwait(false);
+            using HttpResponseMessage response = await _client.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
-            return await DeserializeContentAsync(response, contentDeserializer).ConfigureAwait(false);
+            return await DeserializeContentAsync(response, contentDeserializer, cancellationToken).ConfigureAwait(false);
         }
 
         public static async Task<T> PostAsync<T>(IXApiContext context, string path,
             object parameters = default,
-            Func<HttpContent, Task<T>> contentDeserializer = default)
+            Func<HttpContent, CancellationToken, Task<T>> contentDeserializer = default,
+            CancellationToken cancellationToken = default)
         {
             using HttpRequestMessage request = CreateRequest(context, HttpMethod.Post, path, parameters);
-            using HttpResponseMessage response = await _client.SendAsync(request).ConfigureAwait(false);
+            using HttpResponseMessage response = await _client.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
-            return await DeserializeContentAsync(response, contentDeserializer).ConfigureAwait(false);
+            return await DeserializeContentAsync(response, contentDeserializer, cancellationToken).ConfigureAwait(false);
         }
 
         public static async Task<T> DeserializeContentAsync<T>(this HttpResponseMessage response,
-            Func<HttpContent, Task<T>> responseContentConverter = default)
+            Func<HttpContent, CancellationToken, Task<T>> responseContentConverter = default,
+            CancellationToken cancellationToken = default)
         {
             if (!response.IsSuccessStatusCode)
             {
@@ -102,16 +106,16 @@ namespace IntelSharp
             }
 
             if (responseContentConverter != null)
-                return await responseContentConverter(response.Content).ConfigureAwait(false);
+                return await responseContentConverter(response.Content, cancellationToken).ConfigureAwait(false);
 
             if (typeof(T) == typeof(string))
-                return (T)(object)await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                return (T)(object)await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
 
             if (typeof(T) == typeof(byte[]))
-                return (T)(object)await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+                return (T)(object)await response.Content.ReadAsByteArrayAsync(cancellationToken).ConfigureAwait(false);
 
             if (response.Content.Headers.ContentType.MediaType == "application/json")
-                return await response.Content.ReadFromJsonAsync<T>(_serializerOptions).ConfigureAwait(false);
+                return await response.Content.ReadFromJsonAsync<T>(_serializerOptions, cancellationToken).ConfigureAwait(false);
 
             return default;
         }

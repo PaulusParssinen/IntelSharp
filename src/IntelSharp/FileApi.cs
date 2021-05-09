@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
@@ -29,14 +30,14 @@ namespace IntelSharp
         /// </summary>
         /// <param name="item">The item.</param>
         /// <returns>The raw binary data of the item.</returns>
-        public Task<byte[]> ReadAsync(Item item)
+        public Task<byte[]> ReadAsync(Item item, CancellationToken cancellationToken = default)
         {
-            return ReadAsync(item.StorageId, item.Bucket);
+            return ReadAsync(item.StorageId, item.Bucket, cancellationToken);
         }
-        /// <inheritdoc cref="ReadAsync(Item)"/>
+        /// <inheritdoc cref="ReadAsync(Item, CancellationToken)"/>
         /// <param name="storageId">The <see cref="Item.StorageId">storage identifier</see> of the item.</param>
         /// <param name="bucket">The bucket in which the item is located.</param>
-        public async Task<byte[]> ReadAsync(string storageId, string? bucket = default)
+        public Task<byte[]> ReadAsync(string storageId, string? bucket = default, CancellationToken cancellationToken = default)
         {
             const int OUTPUT_TYPE_RAW_BINARY = 0;
 
@@ -47,7 +48,7 @@ namespace IntelSharp
                 { "bucket", bucket ?? string.Empty }
             };
 
-            return await IXAPI.GetAsync<byte[]>(_context, "/file/read", parameters).ConfigureAwait(false);
+            return IXAPI.GetAsync<byte[]>(_context, "/file/read", parameters, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -62,18 +63,19 @@ namespace IntelSharp
         /// <param name="escapeHtml">Should the output HTML be escaped.</param>
         /// <exception cref="InvalidOperationException"/>
         /// <exception cref="Exception">The item was not found.</exception>
-        public Task<byte[]> ViewAsync(Item item, ViewFormat format = ViewFormat.Text, bool escapeHtml = true)
+        public Task<byte[]> ViewAsync(Item item, ViewFormat format = ViewFormat.Text, bool escapeHtml = true, CancellationToken cancellationToken = default)
         {
-            return ViewAsync(item.StorageId, item.Bucket, format, escapeHtml);
+            return ViewAsync(item.StorageId, item.Bucket, format, escapeHtml, cancellationToken);
         }
-        /// <inheritdoc cref="ViewAsync(Item, ViewFormat, bool)"/>
+        /// <inheritdoc cref="ViewAsync(Item, ViewFormat, bool, CancellationToken)"/>
         /// <param name="storageId">The <see cref="Item.StorageId">storage identifier</see> of the item.</param>
         /// <param name="bucket">The bucket in which the item is located.</param>
-        public async Task<byte[]> ViewAsync(
+        public Task<byte[]> ViewAsync(
             string storageId, 
             string bucket, 
             ViewFormat format = ViewFormat.Text,
-            bool escapeHtml = true)
+            bool escapeHtml = true,
+            CancellationToken cancellationToken = default)
         {
             var parameters = new Dictionary<string, object>
             {
@@ -83,7 +85,7 @@ namespace IntelSharp
                 { "escape", escapeHtml ? 1 : 0 }
             };
 
-            return await IXAPI.GetAsync<byte[]>(_context, "/file/view", parameters).ConfigureAwait(false);
+            return IXAPI.GetAsync<byte[]>(_context, "/file/view", parameters, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -94,22 +96,23 @@ namespace IntelSharp
         /// <param name="escapeHtml">Should the output HTML be escaped.</param>
         /// <exception cref="InvalidOperationException"/>
         /// <returns>The preview of data.</returns>
-        public Task<byte[]> PreviewAsync(Item item, int lineCount = 12, bool escapeHtml = true)
+        public Task<byte[]> PreviewAsync(Item item, int lineCount = 12, bool escapeHtml = true, CancellationToken cancellationToken = default)
         {
-            return PreviewAsync(item.StorageId, item.Type, item.MediaType, item.Bucket, lineCount, escapeHtml);
+            return PreviewAsync(item.StorageId, item.Type, item.MediaType, item.Bucket, lineCount, escapeHtml, cancellationToken);
         }
-        /// <inheritdoc cref="PreviewAsync(Item, int, bool)"/>
+        /// <inheritdoc cref="PreviewAsync(Item, int, bool, CancellationToken)"/>
         /// <param name="storageId">The <see cref="Item.StorageId">storage identifier</see> of the item.</param>
         /// <param name="dataType">The low-level type representaton of the item's data type. Must be same as the source item's.</param>
         /// <param name="mediaType">The high-level type representaton of the item's data type. Must be same as the source item's.</param>
         /// <param name="bucket">The bucket in which the item is located.</param>
-        public async Task<byte[]> PreviewAsync(
+        public Task<byte[]> PreviewAsync(
             string storageId,
             DataType dataType,
             MediaType mediaType,
             string bucket,
             int lineCount = 12, 
-            bool escapeHtml = true)
+            bool escapeHtml = true,
+            CancellationToken cancellationToken = default)
         {
             var parameters = new Dictionary<string, object>
             {
@@ -122,7 +125,7 @@ namespace IntelSharp
                 { "e", escapeHtml ? 1 : 0 }
             };
 
-            return await IXAPI.GetAsync<byte[]>(_context, "/file/preview", parameters).ConfigureAwait(false);
+            return IXAPI.GetAsync<byte[]>(_context, "/file/preview", parameters, cancellationToken: cancellationToken);
         }
     }
 }

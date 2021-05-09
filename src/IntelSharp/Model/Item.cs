@@ -71,13 +71,13 @@ namespace IntelSharp.Model
 
         /// <summary>
         /// Represents relevancy of the found item with integer between 0-100, from least to the most relevant. This is calculated by presence of certain weighted keywords which are hardcoded at server. 
-        /// <para>See: <seealso cref="ItemApi.ExplainXScoreAsync(Item)"/></para>
+        /// <para>See: <seealso cref="ItemApi.ExplainXScoreAsync(Item, System.Threading.CancellationToken)"/></para>
         /// </summary>
         public int XScore { get; set; }
 
         /// <summary>
         /// Similarity hash called SimHash developed by Moses Charikar. 
-        /// <para>Can be used to find similar items when used as a term in <see cref="IntelligentSearchApi.SearchAsync(string, string[], int, int, DateTime, DateTime, SortType, MediaType, Guid[])"/></para>
+        /// <para>Can be used to find similar items when used as a term in <see cref="SearchApi{TResult}.SearchAsync(string, string[], int, int, DateTime?, DateTime?, SortType, MediaType, Guid[], System.Threading.CancellationToken)"/></para>
         /// </summary>
         public ulong Simhash { get; set; }
 

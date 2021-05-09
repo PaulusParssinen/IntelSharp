@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
@@ -33,7 +34,7 @@ namespace IntelSharp
         /// <param name="to">Result before the specified date. Both <paramref name="from"/> and <paramref name="to"/> are required if set.</param>
         /// <param name="sorting">The sort order.</param>
         /// <param name="mediaType">The <see cref="MediaType"/> filter.</param>
-        /// <param name="terminate">An array of search identifiers to be terminated. Can also be done with <seealso cref="TerminateAsync(Guid)"/></param>
+        /// <param name="terminate">An array of search identifiers to be terminated. Can also be done with <seealso cref="TerminateAsync(Guid, CancellationToken)"/></param>
         /// <exception cref="ArgumentException">Thrown when invalid search <paramref name="term"/> is submitted.</exception>
         /// <returns>The search identifier to be used to retrieve the results.</returns>
         public async Task<Guid> SearchAsync(string term,
@@ -42,7 +43,8 @@ namespace IntelSharp
             DateTime? from = default, DateTime? to = default,
             SortType sorting = default,
             MediaType mediaType = default,
-            Guid[] terminate = default)
+            Guid[] terminate = default, 
+            CancellationToken cancellationToken = default)
         {
             var searchRequest = new SearchRequest
             {
@@ -58,7 +60,7 @@ namespace IntelSharp
             };
             
             var response = await IXAPI.PostAsync<SearchResponse>(_context,
-                _apiPathSegment + "/search", searchRequest).ConfigureAwait(false);
+                _apiPathSegment + "/search", searchRequest, cancellationToken: cancellationToken).ConfigureAwait(false);
 
             if (response.Status == SearchStatus.InvalidTerm)
                 throw new ArgumentException("Invalid input term.", nameof(term));
@@ -72,13 +74,13 @@ namespace IntelSharp
         /// <param name="searchId">The identifier of search job.</param>
         /// <param name="offset">The search offset to start from.</param>
         /// <param name="limit">Maximum amount of results.</param>
-        public abstract Task<(SearchResultStatus, IEnumerable<TResult>)> FetchResultsAsync(Guid searchId, int offset = 0, int limit = 100);
+        public abstract Task<(SearchResultStatus, IEnumerable<TResult>)> FetchResultsAsync(Guid searchId, int offset = 0, int limit = 100, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Terminates the search job, no-op if the search was already terminated.
         /// </summary>
         /// <param name="searchId">The identifier of search to be terminated.</param>
-        public async Task TerminateAsync(Guid searchId)
+        public async Task TerminateAsync(Guid searchId, CancellationToken cancellationToken = default)
         {
             var parameters = new Dictionary<string, object>
             {
@@ -86,9 +88,9 @@ namespace IntelSharp
             };
 
             await IXAPI.PostAsync<string>(_context,
-                "/intelligent/search/terminate", parameters).ConfigureAwait(false);
+                "/intelligent/search/terminate", parameters, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        //public async Task ExportAsync(Guid searchId, int format) => throw new NotImplementedException(); //TODO:
+        //public async Task ExportAsync(Guid searchId, int format, CancellationToken cancellationToken = default) => throw new NotImplementedException(); //TODO:
     }
 }
