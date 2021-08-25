@@ -21,6 +21,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: "github.event_name != 'release' && !contains(github.event.head_commit.message, 'skip-ci')"
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET
